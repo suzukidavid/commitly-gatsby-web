@@ -9,7 +9,7 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import { graphql, useStaticQuery } from "gatsby";
 
-const SEO: React.FC<{
+export const SEO: React.FC<{
   description?: string;
   lang?: string;
   meta?: { name: string; content: string }[];
@@ -75,5 +75,3 @@ const SEO: React.FC<{
     />
   );
 };
-
-export default SEO;

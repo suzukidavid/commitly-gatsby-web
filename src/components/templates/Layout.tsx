@@ -8,9 +8,9 @@
 import React from "react";
 import { graphql, useStaticQuery } from "gatsby";
 
-import Header from "./header";
+import { Header } from "../molecules/Header";
 
-const Layout: React.FC = ({ children }) => {
+export const Layout: React.FC = ({ children }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -41,5 +41,3 @@ const Layout: React.FC = ({ children }) => {
     </>
   );
 };
-
-export default Layout;

@@ -1,7 +1,7 @@
 import { Link } from "gatsby";
 import React from "react";
 
-const Header: React.FC<{ siteTitle: string }> = ({ siteTitle }) => (
+export const Header: React.FC<{ siteTitle: string }> = ({ siteTitle }) => (
   <header
     style={{
       background: `#fdd101`,
@@ -29,5 +29,3 @@ const Header: React.FC<{ siteTitle: string }> = ({ siteTitle }) => (
     </div>
   </header>
 );
-
-export default Header;
