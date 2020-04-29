@@ -33,5 +33,6 @@ module.exports = {
     "gatsby-plugin-typescript",
     "gatsby-plugin-eslint",
     "gatsby-plugin-styled-components",
+    "gatsby-plugin-less",
   ],
 };
