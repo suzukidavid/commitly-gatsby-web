@@ -7,3 +7,7 @@
 // You can delete this file if you're not using it
 
 require("semantic-ui-less/semantic.less");
+
+import "firebase/auth";
+import "firebase/firestore";
+import "firebase/functions";
