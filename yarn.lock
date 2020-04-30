@@ -6310,10 +6310,10 @@ gatsby-plugin-eslint@2.0.8:
   resolved "https://registry.yarnpkg.com/gatsby-plugin-eslint/-/gatsby-plugin-eslint-2.0.8.tgz#1ff7f546a427d274dc2de3932ba29822aae330c3"
   integrity sha512-vAMy37povmQJNg6ZxY78fkWR3pKwG8MNMhO3u+4vXj2MYT5avhFvHPJTAb126ZCuygf30gAWlpwbV50zP894Jw==
 
-gatsby-plugin-firebase@0.2.0-beta.4:
-  version "0.2.0-beta.4"
-  resolved "https://registry.yarnpkg.com/gatsby-plugin-firebase/-/gatsby-plugin-firebase-0.2.0-beta.4.tgz#a4d8bfdce8c65efa284d0c523f8524c28f4a786c"
-  integrity sha512-F1uh9T5dY38aeNvKzqj+3K655dce1QS70wuG4bhV9L3cnTJR2vitTWyIoCvRJJfPs7Xq7LgjUDmHDrEos4S3gQ==
+gatsby-plugin-firebase@0.2.0-rc:
+  version "0.2.0-rc"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-firebase/-/gatsby-plugin-firebase-0.2.0-rc.tgz#55c730439e5ec031382d0a2ca4d4a5117176467d"
+  integrity sha512-xK2Z2c/LFoG2aO1hVSpzGVDSXPIb76t8NKPJ/VtbrNk9FqT4d6jVYIa1SGOb9oE1hMPNbEcqqL+iNOQ1/50kPw==
 
 gatsby-plugin-less@3.2.0:
   version "3.2.0"
