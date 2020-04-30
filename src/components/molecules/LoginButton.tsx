@@ -12,7 +12,7 @@ type GithubDataType = {
   username: string;
   user_id: string;
   access_token: string;
-  created_at: firebase.firestore.FieldValue;
+  created_at?: firebase.firestore.FieldValue;
   updated_at: firebase.firestore.FieldValue;
 };
 
@@ -31,7 +31,7 @@ const handleOnLogin = async (user: firebase.User) => {
     },
   } = userCredential as GithubCredentialType;
   const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-  const github = { username, user_id: String(id), access_token: accessToken, updated_at: timestamp } as GithubDataType;
+  const github: GithubDataType = { username, user_id: String(id), access_token: accessToken, updated_at: timestamp };
   if (isNewUser) {
     github.created_at = timestamp;
   }
