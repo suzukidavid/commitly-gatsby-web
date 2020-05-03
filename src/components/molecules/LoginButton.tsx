@@ -2,6 +2,8 @@ import React from "react";
 import firebase from "gatsby-plugin-firebase";
 import { Button, Icon } from "semantic-ui-react";
 
+import { useAuthState } from "../../hooks/useAuthState";
+
 type GithubCredentialType = {
   credential: { accessToken: string };
   additionalUserInfo: { username: string; isNewUser: boolean; profile: { id: number } };
@@ -10,14 +12,14 @@ type GithubCredentialType = {
 
 type UserDataType = {
   github: GithubDataType;
+  createdAt?: firebase.firestore.FieldValue;
+  updatedAt: firebase.firestore.FieldValue;
 };
 
 type GithubDataType = {
   username: string;
   userId: string;
   accessToken: string;
-  createdAt?: firebase.firestore.FieldValue;
-  updatedAt: firebase.firestore.FieldValue;
 };
 
 const handleOnLogin = async () => {
@@ -36,19 +38,20 @@ const handleOnLogin = async () => {
     user: { uid },
   } = userCredential as GithubCredentialType;
   const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-  const github: GithubDataType = { username, userId: String(id), accessToken: accessToken, updatedAt: timestamp };
+  const github: GithubDataType = { username, userId: String(id), accessToken: accessToken };
+  const userData: UserDataType = { github, updatedAt: timestamp };
   if (isNewUser) {
-    github.createdAt = timestamp;
+    userData.createdAt = timestamp;
   }
-  const userData: UserDataType = { github };
   await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
 };
 
 export const LoginButton: React.FC = () => {
+  const user = useAuthState();
   return (
     <Button color="black" onClick={() => handleOnLogin()}>
       <Icon name="github" />
-      ログイン
+      {user ? "ログイン中" : "ログイン"}
     </Button>
   );
 };

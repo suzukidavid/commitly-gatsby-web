@@ -5,6 +5,7 @@ import { Layout } from "../components/templates/Layout";
 import { Image } from "../components/molecules/image";
 import { SEO } from "../components/templates/SEO";
 import { LoginButton } from "../components/molecules/LoginButton";
+import { TwitterConnectButton } from "../components/molecules/TwitterConnectButton";
 
 const IndexPage: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const IndexPage: React.FC = () => {
       <p>Welcome to your new Gatsby site.</p>
       <p>Now go build something great.</p>
       <LoginButton />
+      <TwitterConnectButton />
       <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
         <Image />
       </div>
