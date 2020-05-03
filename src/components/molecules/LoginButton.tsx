@@ -8,12 +8,16 @@ type GithubCredentialType = {
   user: { uid: string };
 };
 
+type UserDataType = {
+  github: GithubDataType;
+};
+
 type GithubDataType = {
   username: string;
-  user_id: string;
-  access_token: string;
-  created_at?: firebase.firestore.FieldValue;
-  updated_at: firebase.firestore.FieldValue;
+  userId: string;
+  accessToken: string;
+  createdAt?: firebase.firestore.FieldValue;
+  updatedAt: firebase.firestore.FieldValue;
 };
 
 const handleOnLogin = async () => {
@@ -22,7 +26,6 @@ const handleOnLogin = async () => {
   provider.setCustomParameters({ allow_signup: true });
 
   const userCredential: unknown = await firebase.auth().signInWithPopup(provider);
-  console.log(userCredential);
   const {
     credential: { accessToken },
     additionalUserInfo: {
@@ -33,11 +36,11 @@ const handleOnLogin = async () => {
     user: { uid },
   } = userCredential as GithubCredentialType;
   const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-  const github: GithubDataType = { username, user_id: String(id), access_token: accessToken, updated_at: timestamp };
+  const github: GithubDataType = { username, userId: String(id), accessToken: accessToken, updatedAt: timestamp };
   if (isNewUser) {
-    github.created_at = timestamp;
+    github.createdAt = timestamp;
   }
-  const userData = { github };
+  const userData: UserDataType = { github };
   await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
 };
 
