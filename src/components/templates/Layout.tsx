@@ -7,8 +7,11 @@
 
 import React from "react";
 import { graphql, useStaticQuery } from "gatsby";
+import styled from "styled-components";
+import { Container } from "semantic-ui-react";
 
 import { Header } from "../molecules/Header";
+import { Footer } from "../molecules/Footer";
 
 export const Layout: React.FC = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -22,22 +25,22 @@ export const Layout: React.FC = ({ children }) => {
   `);
 
   return (
-    <>
+    <Wrapper>
       <Header siteTitle={data.site.siteMetadata.title} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0 1.0875rem 1.45rem`,
-        }}
-      >
-        <main>{children}</main>
-        <footer>
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.org">Gatsby</a>
-        </footer>
-      </div>
-    </>
+      <MainContainer>{children}</MainContainer>
+      <Footer />
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+`;
+
+const MainContainer = styled(Container)`
+  &&& {
+    flex: 1;
+  }
+`;
