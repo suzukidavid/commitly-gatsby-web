@@ -49,13 +49,13 @@ const handleOnLogin = async (user: firebase.User) => {
 };
 
 export const TwitterConnectButton: React.FC = () => {
-  const user = useAuthState();
+  const { user } = useAuthState();
   if (!user) {
     return null;
   }
   const twitterUserData = user.providerData.find((d) => d.providerId === TwitterProviderId);
   return (
-    <Button color="twitter" onClick={() => handleOnLogin(user)}>
+    <Button color="twitter" size="big" onClick={() => handleOnLogin(user)}>
       <Icon name="twitter" />
       {twitterUserData ? "ログイン中" : "ログイン"}
     </Button>

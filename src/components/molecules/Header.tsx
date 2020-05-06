@@ -3,16 +3,29 @@ import React from "react";
 import { Dropdown, Icon, Image } from "semantic-ui-react";
 import styled from "styled-components";
 
+import { useAuthState } from "../../hooks/useAuthState";
+
+import { LoginButton } from "./LoginButton";
+
 export const Header: React.FC = () => {
+  const { user, logout } = useAuthState();
   return (
     <Wrapper>
-      <LogoLink to="/page-2/">
+      <LogoLink to="/">
         <LogoImage src="logo_header.png" />
       </LogoLink>
 
       <Dropdown icon={<BarIcon name="bars" size="big" />}>
         <Dropdown.Menu direction="left">
-          <Dropdown.Item>ログイン</Dropdown.Item>
+          {user ? (
+            <Dropdown.Item>
+              <Dropdown.Item text="ログアウト" icon="sign-out" onClick={() => logout()} />
+            </Dropdown.Item>
+          ) : (
+            <Dropdown.Item>
+              <LoginButton />
+            </Dropdown.Item>
+          )}
         </Dropdown.Menu>
       </Dropdown>
     </Wrapper>
@@ -33,7 +46,8 @@ const Wrapper = styled.header`
 
 const LogoLink = styled(Link)`
   &&& {
-    height: 100%;
+    height: 80%;
+    margin-left: 10px;
   }
 `;
 
