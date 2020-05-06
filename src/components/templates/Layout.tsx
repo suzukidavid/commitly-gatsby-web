@@ -8,17 +8,22 @@
 import React from "react";
 import styled from "styled-components";
 import { Container } from "semantic-ui-react";
+import { SemanticToastContainer } from "react-semantic-toasts";
 
 import { Header } from "../molecules/Header";
 import { Footer } from "../molecules/Footer";
 
 export const Layout: React.FC = ({ children }) => {
   return (
-    <Wrapper>
-      <Header />
-      <MainContainer text>{children}</MainContainer>
-      <Footer />
-    </Wrapper>
+    <>
+      <Wrapper>
+        <Header />
+        <MainContainer text>{children}</MainContainer>
+        <Footer />
+      </Wrapper>
+
+      <SemanticToastContainer position="top-center" />
+    </>
   );
 };
 

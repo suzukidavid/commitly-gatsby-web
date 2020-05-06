@@ -11,3 +11,5 @@ require("semantic-ui-less/semantic.less");
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/functions";
+
+import "react-semantic-toasts/styles/react-semantic-alert.css";

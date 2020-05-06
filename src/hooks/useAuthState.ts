@@ -1,6 +1,8 @@
 import React from "react";
 import * as f from "firebase";
 import firebase from "gatsby-plugin-firebase";
+import { toast } from "react-semantic-toasts";
+
 import "firebase/auth";
 
 type GithubCredentialType = {
@@ -26,14 +28,15 @@ export const useAuthState = () => {
 
   const setCurrentUser = () => {
     if (typeof window !== "undefined") {
-      firebase.auth().onAuthStateChanged((currentUser) => setUser(currentUser));
+      firebase.auth().onAuthStateChanged((currentUser) => {
+        setUser(currentUser);
+      });
     }
   };
 
   const login = async () => {
     const provider = new firebase.auth.GithubAuthProvider();
     provider.addScope("read:user");
-    provider.setCustomParameters({ allow_signup: true });
 
     const userCredential: unknown = await firebase.auth().signInWithPopup(provider);
     const {
@@ -46,18 +49,26 @@ export const useAuthState = () => {
       user: { uid },
     } = userCredential as GithubCredentialType;
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-    const github: GithubDataType = { username, userId: String(id), accessToken: accessToken };
+    const github: GithubDataType = { username, userId: String(id), accessToken };
     const userData: UserDataType = { github, updatedAt: timestamp };
     if (isNewUser) {
       userData.createdAt = timestamp;
     }
     await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
     setCurrentUser();
+    toast({
+      type: "success",
+      title: "ログインしました！",
+    });
   };
 
   const logout = async () => {
     await firebase.auth().signOut();
     setCurrentUser();
+    toast({
+      type: "success",
+      title: "ログアウトしました！",
+    });
   };
 
   React.useEffect(() => {

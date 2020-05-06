@@ -22,7 +22,7 @@ const IndexPage: React.FC = () => {
           <Grid.Row>
             <Grid.Column width="8">
               <Header>あなたのコミットを共有しませんか？</Header>
-              <p>Commitlyはあなたの書いたコードをプログラミング言語別に集計してシェアするためのサービスです</p>
+              <Text>Commitlyはあなたの書いたコードをプログラミング言語別に集計してシェアするためのサービスです</Text>
             </Grid.Column>
             <Grid.Column width="8">
               <a
@@ -39,20 +39,20 @@ const IndexPage: React.FC = () => {
         </Grid>
       </Segment>
 
-      {!user && (
-        <Segment vertical textAlign="center" padded="very">
-          <Header>あなたのコミットもシェアしてみませんか？</Header>
-          <AlignMiddle>
-            <LoginButton />
-            <Label pointing="left" size="big" color="blue">
-              Join Now!!
-            </Label>
-          </AlignMiddle>
-        </Segment>
-      )}
+      <Segment vertical textAlign="center" padded="very">
+        <Header>あなたのコミットもシェアしてみませんか？</Header>
+        <AlignMiddle>
+          <LoginButton />
+          <Label pointing="left" size="big" color="blue">
+            Join Now!!
+          </Label>
+        </AlignMiddle>
+      </Segment>
     </Layout>
   );
 };
+
+const Text = styled.p``;
 
 const AlignMiddle = styled.div`
   display: flex;
