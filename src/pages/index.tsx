@@ -1,11 +1,14 @@
 import React from "react";
-import { Grid, Header, Image, Segment } from "semantic-ui-react";
+import styled from "styled-components";
+import { Grid, Header, Image, Label, Segment } from "semantic-ui-react";
 
 import { Layout } from "../components/templates/Layout";
 import { SEO } from "../components/templates/SEO";
 import { LoginButton } from "../components/molecules/LoginButton";
+import { useAuthState } from "../hooks/useAuthState";
 
 const IndexPage: React.FC = () => {
+  const { user } = useAuthState();
   return (
     <Layout>
       <SEO title="Top" />
@@ -35,8 +38,26 @@ const IndexPage: React.FC = () => {
           </Grid.Row>
         </Grid>
       </Segment>
+
+      {!user && (
+        <Segment vertical textAlign="center" padded="very">
+          <Header>あなたのコミットもシェアしてみませんか？</Header>
+          <AlignMiddle>
+            <LoginButton />
+            <Label pointing="left" size="big" color="blue">
+              Join Now!!
+            </Label>
+          </AlignMiddle>
+        </Segment>
+      )}
     </Layout>
   );
 };
+
+const AlignMiddle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 export default IndexPage;
