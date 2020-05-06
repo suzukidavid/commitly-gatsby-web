@@ -53,7 +53,7 @@ export const TwitterConnectButton: React.FC = () => {
   if (!user) {
     return null;
   }
-  const twitterUserData = user.providerData.find((d) => d.providerId === TwitterProviderId);
+  const twitterUserData = user.providerData.find((d) => d && d.providerId === TwitterProviderId);
   return (
     <Button color="twitter" size="big" onClick={() => handleOnLogin(user)}>
       <Icon name="twitter" />

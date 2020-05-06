@@ -6,7 +6,6 @@
  */
 
 import React from "react";
-import { graphql, useStaticQuery } from "gatsby";
 import styled from "styled-components";
 import { Container } from "semantic-ui-react";
 
@@ -14,16 +13,6 @@ import { Header } from "../molecules/Header";
 import { Footer } from "../molecules/Footer";
 
 export const Layout: React.FC = ({ children }) => {
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `);
-
   return (
     <Wrapper>
       <Header />

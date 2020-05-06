@@ -64,5 +64,6 @@ export const useAuthState = () => {
     setCurrentUser();
     return;
   }, []);
+
   return { user, login, logout };
 };
