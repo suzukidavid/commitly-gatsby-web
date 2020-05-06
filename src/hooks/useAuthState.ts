@@ -26,14 +26,6 @@ type GithubDataType = {
 export const useAuthState = () => {
   const [user, setUser] = React.useState<null | f.User>(null);
 
-  const setCurrentUser = () => {
-    if (typeof window !== "undefined") {
-      firebase.auth().onAuthStateChanged((currentUser) => {
-        setUser(currentUser);
-      });
-    }
-  };
-
   const login = async () => {
     const provider = new firebase.auth.GithubAuthProvider();
     provider.addScope("read:user");
@@ -55,7 +47,6 @@ export const useAuthState = () => {
       userData.createdAt = timestamp;
     }
     await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
-    setCurrentUser();
     toast({
       type: "success",
       title: "ログインしました！",
@@ -64,7 +55,6 @@ export const useAuthState = () => {
 
   const logout = async () => {
     await firebase.auth().signOut();
-    setCurrentUser();
     toast({
       type: "success",
       title: "ログアウトしました！",
@@ -72,8 +62,20 @@ export const useAuthState = () => {
   };
 
   React.useEffect(() => {
+    let mounted = true;
+    const setCurrentUser = () => {
+      if (typeof window !== "undefined") {
+        firebase.auth().onAuthStateChanged((currentUser) => {
+          if (mounted) {
+            setUser(currentUser);
+          }
+        });
+      }
+    };
     setCurrentUser();
-    return;
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return { user, login, logout };
