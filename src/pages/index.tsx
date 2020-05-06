@@ -1,25 +1,40 @@
 import React from "react";
-import { Link } from "gatsby";
+import { Grid, Header, Image, Segment } from "semantic-ui-react";
 
 import { Layout } from "../components/templates/Layout";
-import { Image } from "../components/molecules/image";
 import { SEO } from "../components/templates/SEO";
 import { LoginButton } from "../components/molecules/LoginButton";
-import { TwitterConnectButton } from "../components/molecules/TwitterConnectButton";
 
 const IndexPage: React.FC = () => {
   return (
     <Layout>
       <SEO title="Top" />
-      <h1>Hi people</h1>
-      <p>Welcome to your new Gatsby site.</p>
-      <p>Now go build something great.</p>
-      <LoginButton />
-      <TwitterConnectButton />
-      <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-        <Image />
-      </div>
-      <Link to="/page-2/">Go to page 2</Link>
+
+      <Segment vertical>
+        <Image src="logo.png" />
+      </Segment>
+
+      <Segment vertical>
+        <Grid container stackable verticalAlign="middle">
+          <Grid.Row>
+            <Grid.Column width="8">
+              <Header>あなたのコミットを共有しませんか？</Header>
+              <p>Commitlyはあなたの書いたコードをプログラミング言語別に集計してシェアするためのサービスです</p>
+            </Grid.Column>
+            <Grid.Column width="8">
+              <a
+                className="twitter-timeline"
+                data-height="400"
+                href="https://twitter.com/commitly_jp"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Tweets by commitly_jp
+              </a>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Segment>
     </Layout>
   );
 };
