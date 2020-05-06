@@ -26,7 +26,7 @@ export const Layout: React.FC = ({ children }) => {
 
   return (
     <Wrapper>
-      <Header siteTitle={data.site.siteMetadata.title} />
+      <Header />
       <MainContainer>{children}</MainContainer>
       <Footer />
     </Wrapper>
@@ -42,5 +42,6 @@ const Wrapper = styled.div`
 const MainContainer = styled(Container)`
   &&& {
     flex: 1;
+    margin-top: 60px;
   }
 `;
