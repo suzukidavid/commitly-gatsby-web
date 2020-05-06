@@ -5,10 +5,8 @@ import { Grid, Header, Image, Label, Segment } from "semantic-ui-react";
 import { Layout } from "../components/templates/Layout";
 import { SEO } from "../components/templates/SEO";
 import { LoginButton } from "../components/molecules/LoginButton";
-import { useAuthState } from "../hooks/useAuthState";
 
 const IndexPage: React.FC = () => {
-  const { user } = useAuthState();
   return (
     <Layout>
       <SEO title="Top" />
@@ -40,7 +38,7 @@ const IndexPage: React.FC = () => {
       </Segment>
 
       <Segment vertical textAlign="center" padded="very">
-        <Header>あなたのコミットもシェアしてみませんか？</Header>
+        <Header>あなたのコミットもシェアしよう！</Header>
         <AlignMiddle>
           <LoginButton />
           <Label pointing="left" size="big" color="blue">
