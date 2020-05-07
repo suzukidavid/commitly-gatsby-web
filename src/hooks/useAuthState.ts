@@ -1,6 +1,7 @@
 import React from "react";
 import * as f from "firebase";
 import firebase from "gatsby-plugin-firebase";
+import { navigate } from "gatsby";
 import { toast } from "react-semantic-toasts";
 
 import "firebase/auth";
@@ -47,18 +48,24 @@ export const useAuthState = () => {
       userData.createdAt = timestamp;
     }
     await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
-    toast({
-      type: "success",
-      title: "ログインしました！",
-    });
+    await navigate("/setting");
+    setTimeout(() => {
+      toast({
+        type: "success",
+        title: "ログインしました！",
+      });
+    }, 500);
   };
 
   const logout = async () => {
     await firebase.auth().signOut();
-    toast({
-      type: "success",
-      title: "ログアウトしました！",
-    });
+    await navigate("/");
+    setTimeout(() => {
+      toast({
+        type: "success",
+        title: "ログアウトしました！",
+      });
+    }, 500);
   };
 
   React.useEffect(() => {
