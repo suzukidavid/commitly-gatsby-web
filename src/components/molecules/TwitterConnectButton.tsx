@@ -55,7 +55,7 @@ export const TwitterConnectButton: React.FC = () => {
   }
   const twitterUserData = user.providerData.find((d) => d && d.providerId === TwitterProviderId);
   return (
-    <Button color="twitter" size="big" onClick={() => handleOnLogin(user)}>
+    <Button color="twitter" size="big" onClick={() => handleOnLogin(user)} disabled={!!twitterUserData}>
       <Icon name="twitter" />
       {twitterUserData ? "ログイン中" : "ログイン"}
     </Button>
