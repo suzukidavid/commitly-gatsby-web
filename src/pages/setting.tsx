@@ -4,25 +4,24 @@ import { Button, Header, Icon, Segment } from "semantic-ui-react";
 import { Layout } from "../components/templates/Layout";
 import { SEO } from "../components/templates/SEO";
 import { LoginOnly } from "../components/templates/LoginOnly";
-import { TwitterConnectButton } from "../components/molecules/TwitterConnectButton";
+import { TwitterConnectButton, TwitterProviderId } from "../components/molecules/TwitterConnectButton";
 import { useAuthState } from "../hooks/useAuthState";
 
 const SettingPage = () => {
   const { user, userDoc } = useAuthState();
+  const twitterUserData = user?.providerData.find((d) => d && d.providerId === TwitterProviderId);
   return (
     <Layout>
       <SEO title="Setting" />
       <LoginOnly>
         <Segment vertical>
-          <Header as="h1" size="medium">
-            アカウント設定
-          </Header>
+          <Header as="h1">アカウント設定</Header>
         </Segment>
 
         <Segment vertical>
-          <Header as="h2" size="small">
+          <Header as="h2">
             <Icon name="github" />
-            <Header.Content>GitHub連携</Header.Content>
+            <Header.Content>GitHub</Header.Content>
           </Header>
 
           <p>
@@ -44,11 +43,11 @@ const SettingPage = () => {
         </Segment>
 
         <Segment vertical>
-          <Header as="h2" size="small">
+          <Header as="h2">
             <Icon name="twitter" />
-            <Header.Content>Twitter連携</Header.Content>
+            <Header.Content>Twitter</Header.Content>
           </Header>
-          <p>サービスの利用にはTwitter連携が必要です</p>
+          <p>定期ツイートするためにはTwitter連携が必要です</p>
           <TwitterConnectButton />
         </Segment>
       </LoginOnly>

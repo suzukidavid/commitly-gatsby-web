@@ -1,10 +1,11 @@
 import React from "react";
 import firebase from "gatsby-plugin-firebase";
+import * as f from "firebase";
 import { Button, Icon } from "semantic-ui-react";
 
-import { useAuthState } from "../../hooks/useAuthState";
+import { TwitterDataType, UserDataType, useAuthState } from "../../hooks/useAuthState";
 
-const TwitterProviderId = "twitter.com";
+export const TwitterProviderId = "twitter.com";
 
 type TwitterCredentialType = {
   credential: { accessToken: string; secret: string };
@@ -12,20 +13,7 @@ type TwitterCredentialType = {
   user: { uid: string };
 };
 
-type UserDataType = {
-  twitter: TwitterDataType;
-  setting: { tweetTime: number };
-  updatedAt: firebase.firestore.FieldValue;
-};
-
-type TwitterDataType = {
-  username: string;
-  userId: string;
-  accessToken: string;
-  secret: string;
-};
-
-const handleOnLogin = async (user: firebase.User) => {
+const handleOnLogin = async (user: f.User, userDoc: UserDataType) => {
   const provider = new firebase.auth.TwitterAuthProvider();
   provider.setCustomParameters({ force_login: true });
 
@@ -40,22 +28,26 @@ const handleOnLogin = async (user: firebase.User) => {
     user: { uid },
   } = userCredential as TwitterCredentialType;
   const twitter: TwitterDataType = { username, userId, accessToken, secret };
-  const userData: UserDataType = {
+  const userData = {
     twitter,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    setting: { tweetTime: 19 },
-  };
+  } as UserDataType;
+
+  if (!userDoc.setting.tweetTime) {
+    userData.setting.tweetTime = 21;
+  }
+
   await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
 };
 
 export const TwitterConnectButton: React.FC = () => {
-  const { user } = useAuthState();
-  if (!user) {
+  const { user, userDoc } = useAuthState();
+  if (!user || !userDoc) {
     return null;
   }
   const twitterUserData = user.providerData.find((d) => d && d.providerId === TwitterProviderId);
   return (
-    <Button color="twitter" size="big" onClick={() => handleOnLogin(user)} disabled={!!twitterUserData}>
+    <Button color="twitter" size="big" onClick={() => handleOnLogin(user, userDoc)} disabled={!!twitterUserData}>
       <Icon name="twitter" />
       {twitterUserData ? "Twitter連携中" : "Twitter連携"}
     </Button>

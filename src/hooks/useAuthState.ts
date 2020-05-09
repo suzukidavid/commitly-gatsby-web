@@ -12,8 +12,10 @@ type GithubCredentialType = {
   user: { uid: string };
 };
 
-type UserDataType = {
+export type UserDataType = {
   github: GithubDataType;
+  twitter: TwitterDataType;
+  setting: { tweetTime: number };
   createdAt?: f.firestore.FieldValue;
   updatedAt: f.firestore.FieldValue;
 };
@@ -22,6 +24,13 @@ type GithubDataType = {
   username: string;
   userId: string;
   accessToken: string;
+};
+
+export type TwitterDataType = {
+  username: string;
+  userId: string;
+  accessToken: string;
+  secret: string;
 };
 
 export const useAuthState = () => {
