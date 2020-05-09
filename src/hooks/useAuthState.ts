@@ -25,7 +25,9 @@ type GithubDataType = {
 };
 
 export const useAuthState = () => {
+  const [loading, setLoading] = React.useState(true);
   const [user, setUser] = React.useState<null | f.User>(null);
+  const [userDoc, setUserDoc] = React.useState<null | UserDataType>(null);
 
   const login = async () => {
     const provider = new firebase.auth.GithubAuthProvider();
@@ -70,20 +72,35 @@ export const useAuthState = () => {
 
   React.useEffect(() => {
     let mounted = true;
+
+    const getUserDoc = async (uid: string) => {
+      const doc = await firebase.firestore().collection("users").doc(uid).get();
+      if (mounted) {
+        setUserDoc(doc.data());
+        setLoading(false);
+      }
+    };
+
     const setCurrentUser = () => {
       if (typeof window !== "undefined") {
-        firebase.auth().onAuthStateChanged((currentUser) => {
+        firebase.auth().onAuthStateChanged((currentUser: f.User | null) => {
           if (mounted) {
+            if (currentUser) {
+              getUserDoc(currentUser.uid);
+            } else {
+              setLoading(false);
+            }
             setUser(currentUser);
           }
         });
       }
     };
+
     setCurrentUser();
     return () => {
       mounted = false;
     };
   }, []);
 
-  return { user, login, logout };
+  return { user, userDoc, loading, login, logout };
 };
