@@ -8,7 +8,7 @@ export const LoginButton: React.FC = () => {
   return (
     <Button color="black" size="big" onClick={() => login()} disabled={!!user}>
       <Icon name="github" />
-      {user ? "ログイン中" : "ログイン"}
+      {user ? "GitHubログイン中" : "GitHubログイン"}
     </Button>
   );
 };

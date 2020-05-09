@@ -57,7 +57,7 @@ export const TwitterConnectButton: React.FC = () => {
   return (
     <Button color="twitter" size="big" onClick={() => handleOnLogin(user)} disabled={!!twitterUserData}>
       <Icon name="twitter" />
-      {twitterUserData ? "ログイン中" : "ログイン"}
+      {twitterUserData ? "Twitter連携中" : "Twitter連携"}
     </Button>
   );
 };
