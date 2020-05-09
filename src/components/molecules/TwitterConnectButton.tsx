@@ -3,7 +3,7 @@ import firebase from "gatsby-plugin-firebase";
 import * as f from "firebase";
 import { Button, Icon } from "semantic-ui-react";
 
-import { TwitterDataType, UserDataType, useAuthState } from "../../hooks/useAuthState";
+import { SettiingDataType, TwitterDataType, UserDataType, useAuthState } from "../../hooks/useAuthState";
 
 export const TwitterProviderId = "twitter.com";
 
@@ -32,6 +32,10 @@ const handleOnLogin = async (user: f.User, userDoc: UserDataType) => {
     twitter,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
   } as UserDataType;
+
+  if (!userDoc.setting) {
+    userData.setting = {} as SettiingDataType;
+  }
 
   if (!userDoc.setting.tweetTime) {
     userData.setting.tweetTime = 21;

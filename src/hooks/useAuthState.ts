@@ -15,7 +15,7 @@ type GithubCredentialType = {
 export type UserDataType = {
   github: GithubDataType;
   twitter: TwitterDataType;
-  setting: { tweetTime: number };
+  setting: SettiingDataType;
   createdAt?: f.firestore.FieldValue;
   updatedAt: f.firestore.FieldValue;
 };
@@ -32,6 +32,8 @@ export type TwitterDataType = {
   accessToken: string;
   secret: string;
 };
+
+export type SettiingDataType = { tweetTime: number };
 
 export const useAuthState = () => {
   const [loading, setLoading] = React.useState(true);
@@ -54,7 +56,7 @@ export const useAuthState = () => {
     } = userCredential as GithubCredentialType;
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
     const github: GithubDataType = { username, userId: String(id), accessToken };
-    const userData: UserDataType = { github, updatedAt: timestamp };
+    const userData = { github, updatedAt: timestamp } as UserDataType;
     if (isNewUser) {
       userData.createdAt = timestamp;
     }

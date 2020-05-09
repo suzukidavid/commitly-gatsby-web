@@ -1,21 +1,47 @@
 import React from "react";
-import { Button, Header, Icon, Segment } from "semantic-ui-react";
+import { Button, Dropdown, Header, Icon, Segment } from "semantic-ui-react";
+import firebase from "gatsby-plugin-firebase";
+import { toast } from "react-semantic-toasts";
 
 import { Layout } from "../components/templates/Layout";
 import { SEO } from "../components/templates/SEO";
 import { LoginOnly } from "../components/templates/LoginOnly";
 import { TwitterConnectButton, TwitterProviderId } from "../components/molecules/TwitterConnectButton";
-import { useAuthState } from "../hooks/useAuthState";
+import { UserDataType, useAuthState } from "../hooks/useAuthState";
+
+const tweetTimeOptions = [...Array(24).keys()].map((i) => {
+  const text = `${i + 1}:00`;
+  let value = i + 1;
+  if (value === 24) {
+    value = 0;
+  }
+  return { text, value };
+});
+
+const changeTweetTime = async (uid: string, userDoc: UserDataType, tweetTime: number) => {
+  const userData = {
+    setting: { ...userDoc.setting, tweetTime },
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  } as UserDataType;
+
+  await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
+
+  toast({
+    type: "success",
+    title: "定期ツイート時刻を設定しました！",
+  });
+};
 
 const SettingPage = () => {
   const { user, userDoc } = useAuthState();
   const twitterUserData = user?.providerData.find((d) => d && d.providerId === TwitterProviderId);
+  const tweetTime = userDoc?.setting.tweetTime;
   return (
     <Layout>
       <SEO title="Setting" />
       <LoginOnly>
         <Segment vertical>
-          <Header as="h1">アカウント設定</Header>
+          <Header as="h1">設定</Header>
         </Segment>
 
         <Segment vertical>
@@ -49,6 +75,15 @@ const SettingPage = () => {
           </Header>
           <p>定期ツイートするためにはTwitter連携が必要です</p>
           <TwitterConnectButton />
+
+          <Header as="h3" content="定期ツイート時刻" />
+          <Dropdown
+            value={tweetTime}
+            options={tweetTimeOptions}
+            selection
+            disabled={!twitterUserData}
+            onChange={(e, d) => changeTweetTime(user?.uid as string, userDoc as UserDataType, d.value as number)}
+          />
         </Segment>
       </LoginOnly>
     </Layout>
