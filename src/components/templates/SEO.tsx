@@ -30,14 +30,14 @@ export const SEO: React.FC<{
   );
 
   const metaDescription = description || site.siteMetadata.description;
+  const titleWithSiteName = `${site.siteMetadata.title} | ${title}`;
 
   return (
     <Helmet
       htmlAttributes={{
         lang,
       }}
-      title={title}
-      titleTemplate={`${site.siteMetadata.title}| %s`}
+      title={titleWithSiteName}
       meta={[
         {
           name: `description`,
@@ -45,7 +45,7 @@ export const SEO: React.FC<{
         },
         {
           property: `og:title`,
-          content: title,
+          content: titleWithSiteName,
         },
         {
           property: `og:description`,
@@ -69,7 +69,7 @@ export const SEO: React.FC<{
         },
         {
           name: `twitter:title`,
-          content: title,
+          content: titleWithSiteName,
         },
         {
           name: `twitter:description`,
