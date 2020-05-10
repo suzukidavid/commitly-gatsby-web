@@ -36,6 +36,7 @@ jobs:
       matrix:
         node-version: [12.x]
     steps:
+      - uses: actions/checkout@v2
       - run: yarn lint
       - run: yarn stylelint
 
@@ -46,4 +47,5 @@ jobs:
       matrix:
         node-version: [12.x]
     steps:
+      - uses: actions/checkout@v2
       - run: yarn build
