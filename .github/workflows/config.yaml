@@ -3,13 +3,11 @@ name: Node.js CI
 on: [push]
 
 jobs:
-  build:
+  install:
     runs-on: macos-latest
-
     strategy:
       matrix:
         node-version: [12.x]
-
     steps:
       - uses: actions/checkout@v2
 
@@ -31,8 +29,20 @@ jobs:
 
       - run: yarn install
 
+  lint:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
       - run: yarn lint
-
       - run: yarn stylelint
 
+  build:
+    needs: lint
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
       - run: yarn build
