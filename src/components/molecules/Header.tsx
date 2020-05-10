@@ -66,5 +66,3 @@ const BarIcon = styled(Icon)`
     margin-right: 10px;
   }
 `;
-
-const ItemLink = styled(Link)``;
