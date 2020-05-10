@@ -65,5 +65,11 @@ module.exports = {
       },
     },
     `gatsby-plugin-twitter`,
+    {
+      resolve: `gatsby-plugin-react-redux`,
+      options: {
+        pathToCreateStoreModule: "./src/state/createStore",
+      },
+    },
   ],
 };
