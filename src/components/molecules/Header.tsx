@@ -5,8 +5,6 @@ import styled from "styled-components";
 
 import { useAuthState } from "../../hooks/useAuthState";
 
-import { LoginButton } from "./LoginButton";
-
 export const Header: React.FC = () => {
   const { user, login, logout } = useAuthState();
   return (
