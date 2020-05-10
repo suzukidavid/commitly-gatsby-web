@@ -8,7 +8,7 @@ import { useAuthState } from "../../hooks/useAuthState";
 import { LoginButton } from "./LoginButton";
 
 export const Header: React.FC = () => {
-  const { user, logout } = useAuthState();
+  const { user, login, logout } = useAuthState();
   return (
     <Wrapper>
       <LogoLink to="/">
@@ -19,14 +19,14 @@ export const Header: React.FC = () => {
         <Dropdown.Menu direction="left">
           {user ? (
             <>
+              <Dropdown.Item text="トップ" icon="home" as={Link} to="/" />
               <Dropdown.Item text="設定" icon="setting" as={Link} to="/setting" />
               <Dropdown.Item text="ログアウト" icon="sign-out" onClick={() => logout()} />
             </>
           ) : (
             <>
-              <Dropdown.Item>
-                <LoginButton />
-              </Dropdown.Item>
+              <Dropdown.Item text="ログイン" icon="sign-in" onClick={() => login()} />
+              <Dropdown.Item text="トップ" icon="home" as={Link} to="/" />
             </>
           )}
         </Dropdown.Menu>
