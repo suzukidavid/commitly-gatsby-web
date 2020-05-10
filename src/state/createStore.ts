@@ -1,10 +1,7 @@
 import { createStore } from "redux";
 
-function reducer() {
-  //...
-}
+import { State, rootReducer } from "./reducers";
 
-// preloadedState will be passed in by the plugin
-export default (preloadedState) => {
-  return createStore(reducer, preloadedState);
+export default (preloadedState: State) => {
+  return createStore(rootReducer(), preloadedState);
 };
