@@ -18,13 +18,16 @@ export const Header: React.FC = () => {
       <Dropdown icon={<BarIcon name="bars" size="big" />}>
         <Dropdown.Menu direction="left">
           {user ? (
-            <Dropdown.Item>
+            <>
+              <Dropdown.Item text="設定" icon="setting" as={Link} to="/setting" />
               <Dropdown.Item text="ログアウト" icon="sign-out" onClick={() => logout()} />
-            </Dropdown.Item>
+            </>
           ) : (
-            <Dropdown.Item>
-              <LoginButton />
-            </Dropdown.Item>
+            <>
+              <Dropdown.Item>
+                <LoginButton />
+              </Dropdown.Item>
+            </>
           )}
         </Dropdown.Menu>
       </Dropdown>
@@ -63,3 +66,5 @@ const BarIcon = styled(Icon)`
     margin-right: 10px;
   }
 `;
+
+const ItemLink = styled(Link)``;
