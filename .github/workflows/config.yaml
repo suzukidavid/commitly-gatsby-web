@@ -55,6 +55,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: public
+          path: public
 
       - name: deploy to Firebase Hosting
         uses: w9jds/firebase-action@master
