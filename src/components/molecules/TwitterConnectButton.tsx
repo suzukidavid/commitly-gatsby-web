@@ -2,6 +2,7 @@ import React from "react";
 import firebase from "gatsby-plugin-firebase";
 import * as f from "firebase";
 import { Button, Icon } from "semantic-ui-react";
+import { toast } from "react-semantic-toasts";
 
 import { SettiingDataType, TwitterDataType, UserDataType, useAuthState } from "../../hooks/useAuthState";
 
@@ -42,6 +43,11 @@ const handleOnLogin = async (user: f.User, userDoc: UserDataType) => {
   }
 
   await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
+
+  toast({
+    type: "success",
+    title: "Twitter連携が完了しました！",
+  });
 };
 
 export const TwitterConnectButton: React.FC = () => {

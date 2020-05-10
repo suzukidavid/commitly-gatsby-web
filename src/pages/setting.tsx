@@ -1,12 +1,14 @@
 import React from "react";
 import { Button, Dropdown, Header, Icon, Segment } from "semantic-ui-react";
 import firebase from "gatsby-plugin-firebase";
+import * as f from "firebase";
 import { toast } from "react-semantic-toasts";
 
 import { Layout } from "../components/templates/Layout";
 import { SEO } from "../components/templates/SEO";
 import { LoginOnly } from "../components/templates/LoginOnly";
 import { TwitterConnectButton, TwitterProviderId } from "../components/molecules/TwitterConnectButton";
+import { TwitterUnConnectButton } from "../components/molecules/TwitterUnConnectButton";
 import { UserDataType, useAuthState } from "../hooks/useAuthState";
 
 const tweetTimeOptions = [...Array(24).keys()].map((i) => {
@@ -75,6 +77,8 @@ const SettingPage = () => {
           </Header>
           <p>定期ツイートするためにはTwitter連携が必要です</p>
           <TwitterConnectButton />
+
+          <TwitterUnConnectButton />
 
           <Header as="h3" content="定期ツイート時刻" />
           <Dropdown
