@@ -3,13 +3,13 @@ name: Node.js CI
 on: [push]
 
 jobs:
-  install:
+  build:
     runs-on: macos-latest
     strategy:
       matrix:
         node-version: [12.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@master
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -29,41 +29,22 @@ jobs:
 
       - run: yarn install
 
-  lint:
-    needs: install
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        node-version: [12.x]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v1
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-
-      - run: yarn install
       - run: yarn lint
+
       - run: yarn stylelint
 
-  build:
-    needs: lint
+      - run: yarn build
+
+  deploy:
+    needs: build
+    if: ${{ github.ref == 'master' }}
     runs-on: macos-latest
     strategy:
       matrix:
         node-version: [12.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@master
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -79,5 +60,11 @@ jobs:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: ${{ runner.os }}-yarn-
+
       - run: yarn install
-      - run: yarn build
+      - name: deploy to Firebase Hosting
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
