@@ -37,7 +37,7 @@ export const SEO: React.FC<{
         lang,
       }}
       title={title}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
+      titleTemplate={`${site.siteMetadata.title}| %s`}
       meta={[
         {
           name: `description`,
@@ -56,8 +56,12 @@ export const SEO: React.FC<{
           content: `website`,
         },
         {
+          property: `og:image`,
+          content: `https://commitly-5cdad.firebaseapp.com/logo.png`,
+        },
+        {
           name: `twitter:card`,
-          content: `summary`,
+          content: `summary_large_image`,
         },
         {
           name: `twitter:creator`,
