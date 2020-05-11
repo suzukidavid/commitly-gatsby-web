@@ -2,11 +2,13 @@ import { Link } from "gatsby";
 import React from "react";
 import { Dropdown, Icon, Image } from "semantic-ui-react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 import { useAuthState } from "../../hooks/useAuthState";
 
 export const Header: React.FC = () => {
-  const { user, login, logout } = useAuthState();
+  const { login, logout } = useAuthState();
+  const { user } = useSelector((state) => state.auth);
   return (
     <Wrapper>
       <LogoLink to="/">

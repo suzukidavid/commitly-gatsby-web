@@ -8,7 +8,7 @@ export type UserDocType = {
   updatedAt: f.firestore.FieldValue;
 };
 
-type GithubDataType = {
+export type GithubDataType = {
   username: string;
   userId: string;
   accessToken: string;

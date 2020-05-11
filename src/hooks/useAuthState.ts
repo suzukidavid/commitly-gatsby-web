@@ -3,8 +3,12 @@ import * as f from "firebase";
 import firebase from "gatsby-plugin-firebase";
 import { navigate } from "gatsby";
 import { toast } from "react-semantic-toasts";
+import { useDispatch } from "react-redux";
 
 import "firebase/auth";
+
+import { AuthActions } from "../state/actions/auth";
+import { GithubDataType, UserDocType } from "../types/userDoc";
 
 type GithubCredentialType = {
   credential: { accessToken: string };
@@ -12,33 +16,27 @@ type GithubCredentialType = {
   user: { uid: string };
 };
 
-export type UserDataType = {
-  github: GithubDataType;
-  twitter: TwitterDataType;
-  setting: SettiingDataType;
-  createdAt?: f.firestore.FieldValue;
-  updatedAt: f.firestore.FieldValue;
-};
-
-type GithubDataType = {
-  username: string;
-  userId: string;
-  accessToken: string;
-};
-
-export type TwitterDataType = {
-  username: string;
-  userId: string;
-  accessToken: string;
-  secret: string;
-};
-
-export type SettiingDataType = { tweetTime: number };
-
 export const useAuthState = () => {
-  const [loading, setLoading] = React.useState(true);
-  const [user, setUser] = React.useState<null | f.User>(null);
-  const [userDoc, setUserDoc] = React.useState<null | UserDataType>(null);
+  const dispatch = useDispatch();
+
+  const getUserDoc = async (uid: string) => {
+    const doc = await firebase.firestore().collection("users").doc(uid).get();
+    dispatch(AuthActions.setUserDoc(doc.data()));
+    dispatch(AuthActions.setLoading(false));
+  };
+
+  const setCurrentUser = () => {
+    if (typeof window !== "undefined") {
+      firebase.auth().onAuthStateChanged((currentUser: f.User | null) => {
+        if (currentUser) {
+          getUserDoc(currentUser.uid);
+        } else {
+          dispatch(AuthActions.setLoading(false));
+        }
+        dispatch(AuthActions.setUser(currentUser));
+      });
+    }
+  };
 
   const login = async () => {
     const provider = new firebase.auth.GithubAuthProvider();
@@ -56,7 +54,7 @@ export const useAuthState = () => {
     } = userCredential as GithubCredentialType;
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
     const github: GithubDataType = { username, userId: String(id), accessToken };
-    const userData = { github, updatedAt: timestamp } as UserDataType;
+    const userData = { github, updatedAt: timestamp } as UserDocType;
     if (isNewUser) {
       userData.createdAt = timestamp;
     }
@@ -72,6 +70,7 @@ export const useAuthState = () => {
 
   const logout = async () => {
     await firebase.auth().signOut();
+    dispatch(AuthActions.setUserDoc(null));
     await navigate("/");
     setTimeout(() => {
       toast({
@@ -82,36 +81,9 @@ export const useAuthState = () => {
   };
 
   React.useEffect(() => {
-    let mounted = true;
-
-    const getUserDoc = async (uid: string) => {
-      const doc = await firebase.firestore().collection("users").doc(uid).get();
-      if (mounted) {
-        setUserDoc(doc.data());
-        setLoading(false);
-      }
-    };
-
-    const setCurrentUser = () => {
-      if (typeof window !== "undefined") {
-        firebase.auth().onAuthStateChanged((currentUser: f.User | null) => {
-          if (mounted) {
-            if (currentUser) {
-              getUserDoc(currentUser.uid);
-            } else {
-              setLoading(false);
-            }
-            setUser(currentUser);
-          }
-        });
-      }
-    };
-
     setCurrentUser();
-    return () => {
-      mounted = false;
-    };
+    return;
   }, []);
 
-  return { user, userDoc, loading, login, logout };
+  return { login, logout };
 };

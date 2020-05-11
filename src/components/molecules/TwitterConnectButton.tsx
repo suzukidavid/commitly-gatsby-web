@@ -3,8 +3,9 @@ import firebase from "gatsby-plugin-firebase";
 import * as f from "firebase";
 import { Button, Icon } from "semantic-ui-react";
 import { toast } from "react-semantic-toasts";
+import { useSelector } from "react-redux";
 
-import { SettiingDataType, TwitterDataType, UserDataType, useAuthState } from "../../hooks/useAuthState";
+import { SettiingDataType, TwitterDataType, UserDocType } from "../../types/userDoc";
 
 export const TwitterProviderId = "twitter.com";
 
@@ -14,7 +15,7 @@ type TwitterCredentialType = {
   user: { uid: string };
 };
 
-const handleOnLogin = async (user: f.User, userDoc: UserDataType) => {
+const handleOnLogin = async (user: f.User, userDoc: UserDocType) => {
   const provider = new firebase.auth.TwitterAuthProvider();
   provider.setCustomParameters({ force_login: true });
 
@@ -32,7 +33,7 @@ const handleOnLogin = async (user: f.User, userDoc: UserDataType) => {
   const userData = {
     twitter,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-  } as UserDataType;
+  } as UserDocType;
 
   if (!userDoc.setting) {
     userData.setting = {} as SettiingDataType;
@@ -51,7 +52,7 @@ const handleOnLogin = async (user: f.User, userDoc: UserDataType) => {
 };
 
 export const TwitterConnectButton: React.FC = () => {
-  const { user, userDoc } = useAuthState();
+  const { user, userDoc } = useSelector((state) => state.auth);
   if (!user || !userDoc) {
     return null;
   }

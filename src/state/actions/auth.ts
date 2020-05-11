@@ -6,7 +6,7 @@ import { UserDocType } from "../../types/userDoc";
 const actionCreator = actionCreatorFactory("auth");
 
 export const AuthActions = {
-  setUser: actionCreator<f.User>("setUser"),
-  setUserDoc: actionCreator<UserDocType>("setUserDoc"),
+  setUser: actionCreator<f.User | null>("setUser"),
+  setUserDoc: actionCreator<UserDocType | null>("setUserDoc"),
   setLoading: actionCreator<boolean>("setLoading"),
 };

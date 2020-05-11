@@ -1,15 +1,15 @@
 import React from "react";
 import { Button, Dropdown, Header, Icon, Segment } from "semantic-ui-react";
 import firebase from "gatsby-plugin-firebase";
-import * as f from "firebase";
 import { toast } from "react-semantic-toasts";
+import { useSelector } from "react-redux";
 
 import { Layout } from "../components/templates/Layout";
 import { SEO } from "../components/templates/SEO";
 import { LoginOnly } from "../components/templates/LoginOnly";
 import { TwitterConnectButton, TwitterProviderId } from "../components/molecules/TwitterConnectButton";
 import { TwitterUnConnectButton } from "../components/molecules/TwitterUnConnectButton";
-import { UserDataType, useAuthState } from "../hooks/useAuthState";
+import { UserDocType } from "../types/userDoc";
 
 const tweetTimeOptions = [...Array(24).keys()].map((i) => {
   const text = `${i + 1}:00`;
@@ -20,11 +20,11 @@ const tweetTimeOptions = [...Array(24).keys()].map((i) => {
   return { text, value };
 });
 
-const changeTweetTime = async (uid: string, userDoc: UserDataType, tweetTime: number) => {
+const changeTweetTime = async (uid: string, userDoc: UserDocType, tweetTime: number) => {
   const userData = {
     setting: { ...userDoc.setting, tweetTime },
     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-  } as UserDataType;
+  } as UserDocType;
 
   await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
 
@@ -35,7 +35,7 @@ const changeTweetTime = async (uid: string, userDoc: UserDataType, tweetTime: nu
 };
 
 const SettingPage = () => {
-  const { user, userDoc } = useAuthState();
+  const { user, userDoc } = useSelector((state) => state.auth);
   const twitterUserData = user?.providerData.find((d) => d && d.providerId === TwitterProviderId);
   const tweetTime = userDoc?.setting.tweetTime;
   return (
@@ -86,7 +86,7 @@ const SettingPage = () => {
             options={tweetTimeOptions}
             selection
             disabled={!twitterUserData}
-            onChange={(e, d) => changeTweetTime(user?.uid as string, userDoc as UserDataType, d.value as number)}
+            onChange={(e, d) => changeTweetTime(user?.uid as string, userDoc as UserDocType, d.value as number)}
           />
         </Segment>
       </LoginOnly>

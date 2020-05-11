@@ -3,8 +3,9 @@ import firebase from "gatsby-plugin-firebase";
 import * as f from "firebase";
 import { Button, Icon } from "semantic-ui-react";
 import { toast } from "react-semantic-toasts";
+import { useSelector } from "react-redux";
 
-import { UserDataType, useAuthState } from "../../hooks/useAuthState";
+import { UserDocType } from "../../types/userDoc";
 
 import { TwitterProviderId } from "./TwitterConnectButton";
 
@@ -14,7 +15,7 @@ const handleOnUnlink = async (user: f.User) => {
   const userData = {
     twitter: {},
     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-  } as UserDataType;
+  } as UserDocType;
 
   await firebase.firestore().collection("users").doc(user.uid).set(userData, { merge: true });
 
@@ -25,7 +26,7 @@ const handleOnUnlink = async (user: f.User) => {
 };
 
 export const TwitterUnConnectButton: React.FC = () => {
-  const { user } = useAuthState();
+  const { user } = useSelector((state) => state.auth);
   if (!user) {
     return null;
   }
