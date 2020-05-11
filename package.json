@@ -14,7 +14,8 @@
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "yarn lint --fix",
-    "stylelint": "stylelint src/**/*.tsx"
+    "stylelint": "stylelint src/**/*.tsx",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "babel-plugin-styled-components": "1.10.7",
@@ -45,11 +46,13 @@
     "semantic-ui-less": "2.4.1",
     "semantic-ui-react": "0.88.2",
     "styled-components": "5.1.0",
+    "ts-node": "8.10.1",
     "typescript": "3.8.3",
     "typescript-fsa": "^3.0.0",
     "typescript-fsa-reducers": "^1.2.1"
   },
   "devDependencies": {
+    "@types/node": "13.13.5",
     "@types/react-redux": "^7.1.8",
     "@types/styled-components": "5.1.0",
     "@typescript-eslint/eslint-plugin": "2.31.0",
