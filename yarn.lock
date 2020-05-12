@@ -6438,7 +6438,7 @@ gatsby-plugin-twitter@2.3.1:
   dependencies:
     "@babel/runtime" "^7.9.6"
 
-gatsby-plugin-typescript@2.4.2, gatsby-plugin-typescript@^2.4.2:
+gatsby-plugin-typescript@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-typescript/-/gatsby-plugin-typescript-2.4.2.tgz#bad76d645bec2945c84f47df79d97df86cd6c018"
   integrity sha512-4mtmFqtKaHNeWYL3Bh6vtO6Ay7VjNR6ZFi8lfL/hiXEEXoy8sZO/S/70qVVecbzeYS6DpKZveEKLfluRLwnDvA==
