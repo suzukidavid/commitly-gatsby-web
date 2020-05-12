@@ -12,7 +12,6 @@ export const Layout: React.FC = ({ children }) => {
 
   React.useEffect(() => {
     setCurrentUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
