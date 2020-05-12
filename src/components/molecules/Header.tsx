@@ -4,10 +4,10 @@ import { Dropdown, Icon, Image } from "semantic-ui-react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 
-import { useAuthState } from "../../hooks/useAuthState";
+import { useAuth } from "../../hooks/useAuth";
 
 export const Header: React.FC = () => {
-  const { login, logout } = useAuthState();
+  const { login, logout } = useAuth();
   const { user } = useSelector((state) => state.auth);
   return (
     <Wrapper>

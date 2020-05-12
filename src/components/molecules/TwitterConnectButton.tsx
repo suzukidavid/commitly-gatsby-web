@@ -2,10 +2,10 @@ import React from "react";
 import { Button, Icon } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 
-import { TwitterProviderId, useAuthState } from "../../hooks/useAuthState";
+import { TwitterProviderId, useAuth } from "../../hooks/useAuth";
 
 export const TwitterConnectButton: React.FC = () => {
-  const { twitterConnect } = useAuthState();
+  const { twitterConnect } = useAuth();
   const { user, userDoc } = useSelector((state) => state.auth);
   if (!user || !userDoc) {
     return null;

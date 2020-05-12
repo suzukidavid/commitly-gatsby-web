@@ -23,7 +23,7 @@ type TwitterCredentialType = {
   user: { uid: string };
 };
 
-export const useAuthState = () => {
+export const useAuth = () => {
   const dispatch = useDispatch();
   const { user, userDoc } = useSelector((state) => state.auth);
 

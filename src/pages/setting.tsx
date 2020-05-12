@@ -9,7 +9,7 @@ import { SEO } from "../components/templates/SEO";
 import { LoginOnly } from "../components/templates/LoginOnly";
 import { TwitterConnectButton } from "../components/molecules/TwitterConnectButton";
 import { TwitterUnConnectButton } from "../components/molecules/TwitterUnConnectButton";
-import { TwitterProviderId } from "../hooks/useAuthState";
+import { TwitterProviderId } from "../hooks/useAuth";
 import { UserDocType } from "../types/userDoc";
 
 const tweetTimeOptions = [...Array(24).keys()].map((i) => {

@@ -5,13 +5,14 @@ import { SemanticToastContainer } from "react-semantic-toasts";
 
 import { Header } from "../molecules/Header";
 import { Footer } from "../molecules/Footer";
-import { useAuthState } from "../../hooks/useAuthState";
+import { useAuth } from "../../hooks/useAuth";
 
 export const Layout: React.FC = ({ children }) => {
-  const { setCurrentUser } = useAuthState();
+  const { setCurrentUser } = useAuth();
 
   React.useEffect(() => {
     setCurrentUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
