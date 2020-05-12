@@ -1,14 +1,15 @@
-import React from "react";
 import * as f from "firebase";
 import firebase from "gatsby-plugin-firebase";
 import { navigate } from "gatsby";
 import { toast } from "react-semantic-toasts";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import "firebase/auth";
 
 import { AuthActions } from "../state/actions/auth";
-import { GithubDataType, UserDocType } from "../types/userDoc";
+import { GithubDataType, SettiingDataType, TwitterDataType, UserDocType } from "../types/userDoc";
+
+export const TwitterProviderId = "twitter.com";
 
 type GithubCredentialType = {
   credential: { accessToken: string };
@@ -16,24 +17,26 @@ type GithubCredentialType = {
   user: { uid: string };
 };
 
+type TwitterCredentialType = {
+  credential: { accessToken: string; secret: string };
+  additionalUserInfo: { username: string; isNewUser: boolean; profile: { id_str: string } };
+  user: { uid: string };
+};
+
 export const useAuthState = () => {
   const dispatch = useDispatch();
+  const { user, userDoc } = useSelector((state) => state.auth);
 
-  const getUserDoc = async (uid: string) => {
-    const doc = await firebase.firestore().collection("users").doc(uid).get();
-    dispatch(AuthActions.setUserDoc(doc.data()));
-    dispatch(AuthActions.setLoading(false));
-  };
-
-  const setCurrentUser = () => {
+  const setCurrentUser = async () => {
     if (typeof window !== "undefined") {
-      firebase.auth().onAuthStateChanged((currentUser: f.User | null) => {
-        if (currentUser) {
-          getUserDoc(currentUser.uid);
-        } else {
-          dispatch(AuthActions.setLoading(false));
-        }
+      dispatch(AuthActions.setLoading(true));
+      firebase.auth().onAuthStateChanged(async (currentUser: f.User | null) => {
         dispatch(AuthActions.setUser(currentUser));
+        if (currentUser) {
+          const doc = await firebase.firestore().collection("users").doc(currentUser.uid).get();
+          dispatch(AuthActions.setUserDoc(doc.data()));
+        }
+        dispatch(AuthActions.setLoading(false));
       });
     }
   };
@@ -80,10 +83,69 @@ export const useAuthState = () => {
     }, 500);
   };
 
-  React.useEffect(() => {
-    setCurrentUser();
-    return;
-  }, []);
+  const twitterConnect = async () => {
+    if (!user || !userDoc) {
+      return null;
+    }
 
-  return { login, logout };
+    const provider = new firebase.auth.TwitterAuthProvider();
+    provider.setCustomParameters({ force_login: true });
+
+    const userCredential: unknown = await user.linkWithPopup(provider);
+
+    const {
+      credential: { accessToken, secret },
+      additionalUserInfo: {
+        username,
+        profile: { id_str: userId },
+      },
+      user: { uid },
+    } = userCredential as TwitterCredentialType;
+    const twitter: TwitterDataType = { username, userId, accessToken, secret };
+    const userData = {
+      twitter,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    } as UserDocType;
+
+    if (!userDoc.setting) {
+      userData.setting = {} as SettiingDataType;
+    }
+
+    if (!userDoc.setting.tweetTime) {
+      userData.setting.tweetTime = 21;
+    }
+
+    await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
+
+    await setCurrentUser();
+
+    toast({
+      type: "success",
+      title: "Twitter連携が完了しました！",
+    });
+  };
+
+  const twitterUnconnect = async () => {
+    if (!user) {
+      return null;
+    }
+
+    await user.unlink(TwitterProviderId);
+
+    const userData = {
+      twitter: {},
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    } as UserDocType;
+
+    await firebase.firestore().collection("users").doc(user.uid).set(userData, { merge: true });
+
+    await setCurrentUser();
+
+    toast({
+      type: "success",
+      title: "Twitter連携を解除しました！",
+    });
+  };
+
+  return { setCurrentUser, login, logout, twitterConnect, twitterUnconnect };
 };

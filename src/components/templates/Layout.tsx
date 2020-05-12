@@ -1,10 +1,3 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.org/docs/use-static-query/
- */
-
 import React from "react";
 import styled from "styled-components";
 import { Container } from "semantic-ui-react";
@@ -12,8 +5,15 @@ import { SemanticToastContainer } from "react-semantic-toasts";
 
 import { Header } from "../molecules/Header";
 import { Footer } from "../molecules/Footer";
+import { useAuthState } from "../../hooks/useAuthState";
 
 export const Layout: React.FC = ({ children }) => {
+  const { setCurrentUser } = useAuthState();
+
+  React.useEffect(() => {
+    setCurrentUser();
+  }, []);
+
   return (
     <>
       <Wrapper>
