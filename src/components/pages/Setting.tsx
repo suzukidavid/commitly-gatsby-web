@@ -1,7 +1,5 @@
 import React from "react";
 import { Button, Dropdown, Header, Icon, Segment } from "semantic-ui-react";
-import firebase from "gatsby-plugin-firebase";
-import { toast } from "react-semantic-toasts";
 import { useSelector } from "react-redux";
 import { RouteComponentProps } from "@reach/router";
 
@@ -9,7 +7,6 @@ import { SEO } from "../templates/SEO";
 import { TwitterConnectButton } from "../molecules/TwitterConnectButton";
 import { TwitterUnConnectButton } from "../molecules/TwitterUnConnectButton";
 import { TwitterProviderId, useAuth } from "../../hooks/useAuth";
-import { UserDocType } from "../../types/userDoc";
 
 const tweetTimeOptions = [...Array(24).keys()].map((i) => {
   const text = `${i + 1}:00`;
