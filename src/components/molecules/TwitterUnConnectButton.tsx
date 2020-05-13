@@ -1,31 +1,12 @@
 import React from "react";
-import firebase from "gatsby-plugin-firebase";
-import * as f from "firebase";
 import { Button, Icon } from "semantic-ui-react";
-import { toast } from "react-semantic-toasts";
+import { useSelector } from "react-redux";
 
-import { UserDataType, useAuthState } from "../../hooks/useAuthState";
-
-import { TwitterProviderId } from "./TwitterConnectButton";
-
-const handleOnUnlink = async (user: f.User) => {
-  await user.unlink(TwitterProviderId);
-
-  const userData = {
-    twitter: {},
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-  } as UserDataType;
-
-  await firebase.firestore().collection("users").doc(user.uid).set(userData, { merge: true });
-
-  toast({
-    type: "success",
-    title: "Twitter連携を解除しました！",
-  });
-};
+import { TwitterProviderId, useAuth } from "../../hooks/useAuth";
 
 export const TwitterUnConnectButton: React.FC = () => {
-  const { user } = useAuthState();
+  const { twitterUnconnect } = useAuth();
+  const { user } = useSelector((state) => state.auth);
   if (!user) {
     return null;
   }
@@ -34,7 +15,7 @@ export const TwitterUnConnectButton: React.FC = () => {
     return null;
   }
   return (
-    <Button color="red" size="big" onClick={() => handleOnUnlink(user)}>
+    <Button color="red" size="big" onClick={() => twitterUnconnect()}>
       <Icon name="twitter" />
       Twitter連携解除
     </Button>

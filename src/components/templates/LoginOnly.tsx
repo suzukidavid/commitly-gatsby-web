@@ -1,10 +1,9 @@
 import React from "react";
 import { navigate } from "gatsby";
-
-import { useAuthState } from "../../hooks/useAuthState";
+import { useSelector } from "react-redux";
 
 export const LoginOnly: React.FC = ({ children }) => {
-  const { userDoc, loading } = useAuthState();
+  const { userDoc, loading } = useSelector((state) => state.auth);
 
   React.useEffect(() => {
     if (!loading && !userDoc) {

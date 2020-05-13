@@ -45,7 +45,6 @@ module.exports = {
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
-    "gatsby-plugin-typescript",
     "gatsby-plugin-eslint",
     "gatsby-plugin-styled-components",
     "gatsby-plugin-less",
@@ -65,5 +64,18 @@ module.exports = {
       },
     },
     `gatsby-plugin-twitter`,
+    {
+      resolve: `gatsby-plugin-react-redux`,
+      options: {
+        pathToCreateStoreModule: "./src/state/createStore",
+        serialize: {
+          space: 0,
+          isJSON: true,
+          unsafe: false,
+        },
+        cleanupOnClient: true,
+        windowKey: "__PRELOADED_STATE__",
+      },
+    },
   ],
 };
