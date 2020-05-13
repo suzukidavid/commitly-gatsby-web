@@ -8,7 +8,7 @@ const SettingPage: React.FC = () => {
   return (
     <Layout>
       <LoginOnly>
-        <Setting path="/setting" />
+        <Setting />
       </LoginOnly>
     </Layout>
   );

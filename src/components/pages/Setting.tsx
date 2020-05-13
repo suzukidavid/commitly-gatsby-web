@@ -8,7 +8,7 @@ import { RouteComponentProps } from "@reach/router";
 import { SEO } from "../templates/SEO";
 import { TwitterConnectButton } from "../molecules/TwitterConnectButton";
 import { TwitterUnConnectButton } from "../molecules/TwitterUnConnectButton";
-import { TwitterProviderId } from "../../hooks/useAuth";
+import { TwitterProviderId, useAuth } from "../../hooks/useAuth";
 import { UserDocType } from "../../types/userDoc";
 
 const tweetTimeOptions = [...Array(24).keys()].map((i) => {
@@ -20,22 +20,9 @@ const tweetTimeOptions = [...Array(24).keys()].map((i) => {
   return { text, value };
 });
 
-const changeTweetTime = async (uid: string, userDoc: UserDocType, tweetTime: number) => {
-  const userData = {
-    setting: { ...userDoc.setting, tweetTime },
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-  } as UserDocType;
-
-  await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
-
-  toast({
-    type: "success",
-    title: "定期ツイート時刻を設定しました！",
-  });
-};
-
 export const Setting: React.FC<RouteComponentProps> = () => {
   const { user, userDoc } = useSelector((state) => state.auth);
+  const { changeTweetTime } = useAuth();
   const twitterUserData = user?.providerData.find((d) => d && d.providerId === TwitterProviderId);
   const tweetTime = userDoc?.setting?.tweetTime;
   return (
@@ -85,7 +72,7 @@ export const Setting: React.FC<RouteComponentProps> = () => {
           options={tweetTimeOptions}
           selection
           disabled={!twitterUserData}
-          onChange={(e, d) => changeTweetTime(user?.uid as string, userDoc as UserDocType, d.value as number)}
+          onChange={(e, d) => changeTweetTime(d.value as number)}
         />
       </Segment>
     </>

@@ -27,14 +27,18 @@ export const useAuth = () => {
   const dispatch = useDispatch();
   const { user, userDoc } = useSelector((state) => state.auth);
 
+  const setUserDoc = async (currentUser: f.User) => {
+    const doc = await firebase.firestore().collection("users").doc(currentUser.uid).get();
+    dispatch(AuthActions.setUserDoc(doc.data()));
+  };
+
   const setCurrentUser = async () => {
     if (typeof window !== "undefined") {
       dispatch(AuthActions.setLoading(true));
       firebase.auth().onAuthStateChanged(async (currentUser: f.User | null) => {
         dispatch(AuthActions.setUser(currentUser));
         if (currentUser) {
-          const doc = await firebase.firestore().collection("users").doc(currentUser.uid).get();
-          dispatch(AuthActions.setUserDoc(doc.data()));
+          setUserDoc(currentUser);
         }
         dispatch(AuthActions.setLoading(false));
       });
@@ -147,5 +151,24 @@ export const useAuth = () => {
     });
   };
 
-  return { setCurrentUser, login, logout, twitterConnect, twitterUnconnect };
+  const changeTweetTime = async (tweetTime: number) => {
+    if (!user || !userDoc) {
+      return null;
+    }
+
+    const userData = {
+      setting: { ...userDoc.setting, tweetTime },
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    } as UserDocType;
+
+    await firebase.firestore().collection("users").doc(user.uid).set(userData, { merge: true });
+    await setUserDoc(user);
+
+    toast({
+      type: "success",
+      title: "定期ツイート時刻を設定しました！",
+    });
+  };
+
+  return { setCurrentUser, login, logout, twitterConnect, twitterUnconnect, changeTweetTime };
 };

@@ -17,8 +17,3 @@ exports.onCreateWebpackConfig = ({ stage, actions }) => {
     },
   });
 };
-
-exports.onCreatePage = async ({ page, actions }) => {
-  const { createPage } = actions;
-  createPage(page);
-};
