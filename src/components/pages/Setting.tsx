@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Dropdown, Header, Icon, Segment } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import { RouteComponentProps } from "@reach/router";
+import styled from "styled-components";
 
 import { SEO } from "../templates/SEO";
 import { TwitterConnectButton } from "../molecules/TwitterConnectButton";
@@ -61,7 +62,9 @@ export const Setting: React.FC<RouteComponentProps> = () => {
         <p>定期ツイートするためにはTwitter連携が必要です</p>
         <TwitterConnectButton />
 
-        <TwitterUnConnectButton />
+        <ButtonWrapper>
+          <TwitterUnConnectButton />
+        </ButtonWrapper>
 
         <Header as="h3" content="定期ツイート時刻" />
         <Dropdown
@@ -75,3 +78,7 @@ export const Setting: React.FC<RouteComponentProps> = () => {
     </>
   );
 };
+
+const ButtonWrapper = styled.div`
+  margin-top: 10px;
+`;
