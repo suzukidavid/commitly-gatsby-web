@@ -38,7 +38,7 @@ export const useAuth = () => {
       firebase.auth().onAuthStateChanged(async (currentUser: f.User | null) => {
         dispatch(AuthActions.setUser(currentUser));
         if (currentUser) {
-          setUserDoc(currentUser);
+          await setUserDoc(currentUser);
         }
         dispatch(AuthActions.setLoading(false));
       });
