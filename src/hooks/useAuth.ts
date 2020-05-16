@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "firebase/auth";
 
 import { AuthActions } from "../state/actions/auth";
-import { GithubDataType, SettiingDataType, TwitterDataType, UserDocType } from "../types/userDoc";
+import { User } from "../models/User";
 
 export const TwitterProviderId = "twitter.com";
 
@@ -27,9 +27,18 @@ export const useAuth = () => {
   const dispatch = useDispatch();
   const { user, userDoc } = useSelector((state) => state.auth);
 
-  const setUserDoc = async (currentUser: f.User) => {
-    const doc = await firebase.firestore().collection("users").doc(currentUser.uid).get();
-    dispatch(AuthActions.setUserDoc(doc.data()));
+  const getUserDoc = async (uid: string) => {
+    const doc = await firebase.firestore().collection("users").doc(uid).get();
+    return new User(doc.data());
+  };
+
+  const reloadUserDoc = async (uid: string) => {
+    const userDoc = await getUserDoc(uid);
+    dispatch(AuthActions.setUserDoc(userDoc));
+  };
+
+  const updateFirestoreUserDoc = async (uid: string, userDoc: User) => {
+    await firebase.firestore().collection("users").doc(uid).set(userDoc.getFirestoreObject(), { merge: true });
   };
 
   const setCurrentUser = async () => {
@@ -38,7 +47,7 @@ export const useAuth = () => {
       firebase.auth().onAuthStateChanged(async (currentUser: f.User | null) => {
         dispatch(AuthActions.setUser(currentUser));
         if (currentUser) {
-          await setUserDoc(currentUser);
+          await reloadUserDoc(currentUser.uid);
         }
         dispatch(AuthActions.setLoading(false));
       });
@@ -50,23 +59,26 @@ export const useAuth = () => {
     provider.addScope("read:user");
 
     const userCredential: unknown = await firebase.auth().signInWithPopup(provider);
+
+    // フルスクリーンの場合はポップアップで新規タブを開いてネットワークがオフラインになるため必要
+    await firebase.firestore().enableNetwork();
+
     const {
       credential: { accessToken },
       additionalUserInfo: {
         username,
-        isNewUser,
         profile: { id },
       },
       user: { uid },
     } = userCredential as GithubCredentialType;
-    const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-    const github: GithubDataType = { username, userId: String(id), accessToken };
-    const userData = { github, updatedAt: timestamp } as UserDocType;
-    if (isNewUser) {
-      userData.createdAt = timestamp;
-    }
-    await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
+
+    const userDoc = await getUserDoc(uid);
+    const nextUserDoc = userDoc.setGithub({ username, userId: String(id), accessToken });
+    await updateFirestoreUserDoc(uid, nextUserDoc);
+    await setCurrentUser();
+
     await navigate("/setting");
+
     setTimeout(() => {
       toast({
         type: "success",
@@ -77,8 +89,12 @@ export const useAuth = () => {
 
   const logout = async () => {
     await firebase.auth().signOut();
+
+    dispatch(AuthActions.setUser(null));
     dispatch(AuthActions.setUserDoc(null));
+
     await navigate("/");
+
     setTimeout(() => {
       toast({
         type: "success",
@@ -105,22 +121,9 @@ export const useAuth = () => {
       },
       user: { uid },
     } = userCredential as TwitterCredentialType;
-    const twitter: TwitterDataType = { username, userId, accessToken, secret };
-    const userData = {
-      twitter,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    } as UserDocType;
 
-    if (!userDoc.setting) {
-      userData.setting = {} as SettiingDataType;
-    }
-
-    if (!userDoc.setting.tweetTime) {
-      userData.setting.tweetTime = 21;
-    }
-
-    await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
-
+    const nextUserDoc = userDoc.setTwitter({ username, userId, accessToken, secret });
+    await updateFirestoreUserDoc(uid, nextUserDoc);
     await setCurrentUser();
 
     toast({
@@ -130,19 +133,14 @@ export const useAuth = () => {
   };
 
   const twitterUnconnect = async () => {
-    if (!user) {
+    if (!user || !userDoc) {
       return null;
     }
 
     await user.unlink(TwitterProviderId);
 
-    const userData = {
-      twitter: {},
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    } as UserDocType;
-
-    await firebase.firestore().collection("users").doc(user.uid).set(userData, { merge: true });
-
+    const nextUserDoc = userDoc.clearTwitter();
+    await updateFirestoreUserDoc(user.uid, nextUserDoc);
     await setCurrentUser();
 
     toast({
@@ -156,13 +154,9 @@ export const useAuth = () => {
       return null;
     }
 
-    const userData = {
-      setting: { ...userDoc.setting, tweetTime },
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    } as UserDocType;
-
-    await firebase.firestore().collection("users").doc(user.uid).set(userData, { merge: true });
-    await setUserDoc(user);
+    const nextDoc = userDoc.setSettingTweetTime(tweetTime);
+    await updateFirestoreUserDoc(user.uid, nextDoc);
+    await reloadUserDoc(user.uid);
 
     toast({
       type: "success",

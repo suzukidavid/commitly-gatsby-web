@@ -22,7 +22,7 @@ export const Setting: React.FC<RouteComponentProps> = () => {
   const { user, userDoc } = useSelector((state) => state.auth);
   const { changeTweetTime } = useAuth();
   const twitterUserData = user?.providerData.find((d) => d && d.providerId === TwitterProviderId);
-  const tweetTime = userDoc?.setting?.tweetTime;
+  const tweetTime = userDoc?.setting.tweetTime;
   return (
     <>
       <SEO title="Setting" />
