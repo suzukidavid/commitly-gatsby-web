@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import "firebase/auth";
 
 import { AuthActions } from "../state/actions/auth";
-import { SettiingDataType, TwitterDataType, UserDocType } from "../types/userDoc";
 import { User } from "../models/User";
 
 export const TwitterProviderId = "twitter.com";
@@ -70,9 +69,8 @@ export const useAuth = () => {
     } = userCredential as GithubCredentialType;
 
     const userDoc = await getUserDoc(uid);
-    const nextUserDoc = userDoc.changeGithub({ username, userId: String(id), accessToken });
+    const nextUserDoc = userDoc.setGithub({ username, userId: String(id), accessToken });
     await updateFirestoreUserDoc(uid, nextUserDoc);
-
     await setCurrentUser();
 
     await navigate("/setting");
@@ -119,22 +117,10 @@ export const useAuth = () => {
       },
       user: { uid },
     } = userCredential as TwitterCredentialType;
-    const twitter: TwitterDataType = { username, userId, accessToken, secret };
-    const userData = {
-      twitter,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    } as UserDocType;
 
-    if (!userDoc.setting) {
-      userData.setting = {} as SettiingDataType;
-    }
-
-    if (!userDoc.setting.tweetTime) {
-      userData.setting.tweetTime = 21;
-    }
-
-    await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
-    await reloadUserDoc(uid);
+    const nextUserDoc = userDoc.setTwitter({ username, userId, accessToken, secret });
+    await updateFirestoreUserDoc(uid, nextUserDoc);
+    await setCurrentUser();
 
     toast({
       type: "success",
@@ -143,19 +129,15 @@ export const useAuth = () => {
   };
 
   const twitterUnconnect = async () => {
-    if (!user) {
+    if (!user || !userDoc) {
       return null;
     }
 
     await user.unlink(TwitterProviderId);
 
-    const userData = {
-      twitter: {},
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    } as UserDocType;
-
-    await firebase.firestore().collection("users").doc(user.uid).set(userData, { merge: true });
-    await reloadUserDoc(user.uid);
+    const nextUserDoc = userDoc.clearTwitter();
+    await updateFirestoreUserDoc(user.uid, nextUserDoc);
+    await setCurrentUser();
 
     toast({
       type: "success",
@@ -168,7 +150,7 @@ export const useAuth = () => {
       return null;
     }
 
-    const nextDoc = userDoc.changeSettingTweetTime(tweetTime);
+    const nextDoc = userDoc.setSettingTweetTime(tweetTime);
     await updateFirestoreUserDoc(user.uid, nextDoc);
     await reloadUserDoc(user.uid);
 
