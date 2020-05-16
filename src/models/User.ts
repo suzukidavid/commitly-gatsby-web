@@ -68,7 +68,6 @@ export class User {
   createdAt: Dayjs | null;
 
   constructor({ ...params }) {
-    console.log(params);
     const { github, twitter, setting, updatedAt, createdAt } = params;
     this.github = new Github(github);
     this.twitter = new Twitter(twitter);
