@@ -59,6 +59,10 @@ export const useAuth = () => {
     provider.addScope("read:user");
 
     const userCredential: unknown = await firebase.auth().signInWithPopup(provider);
+
+    // フルスクリーンの場合はポップアップで新規タブを開いてネットワークがオフラインになるため必要
+    await firebase.firestore().enableNetwork();
+
     const {
       credential: { accessToken },
       additionalUserInfo: {
