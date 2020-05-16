@@ -9,8 +9,7 @@ class Github {
   username: string;
   accessToken: string;
 
-  constructor(data) {
-    const { ...params } = data;
+  constructor({ ...params }) {
     const { userId, username, accessToken } = params;
     this.userId = userId;
     this.username = username;
@@ -31,8 +30,7 @@ class Twitter {
   accessToken: string;
   secret: string;
 
-  constructor(data) {
-    const { ...params } = data;
+  constructor({ ...params }) {
     const { userId, username, accessToken, secret } = params;
     this.userId = userId;
     this.username = username;
@@ -49,8 +47,7 @@ class Twitter {
 class Setting {
   tweetTime: number;
 
-  constructor(data) {
-    const { ...params } = data;
+  constructor({ ...params }) {
     const { tweetTime } = params;
     this.tweetTime = tweetTime;
   }
@@ -70,8 +67,7 @@ export class User {
   updatedAt: Dayjs | null;
   createdAt: Dayjs | null;
 
-  constructor(data) {
-    const { ...params } = data;
+  constructor({ ...params }) {
     console.log(params);
     const { github, twitter, setting, updatedAt, createdAt } = params;
     this.github = new Github(github);
@@ -91,6 +87,12 @@ export class User {
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       createdAt,
     };
+  }
+
+  changeGithub({ userId, username, accessToken }: { userId: string; username: string; accessToken: string }) {
+    return produce(this, (draftState) => {
+      draftState.github = new Github({ userId, username, accessToken });
+    });
   }
 
   changeSettingTweetTime(tweetTime: number) {
