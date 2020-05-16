@@ -1,12 +1,12 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers";
-import * as f from "firebase";
 import { produce } from "immer";
+import firebase from "gatsby-plugin-firebase";
 
 import { AuthActions } from "../actions/auth";
 import { User } from "../../models/User";
 
 export interface AuthState {
-  user: f.User | null;
+  user: firebase.User | null;
   userDoc: User | null;
   loading: boolean;
 }

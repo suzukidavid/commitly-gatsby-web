@@ -1,10 +1,7 @@
-import * as f from "firebase";
 import firebase from "gatsby-plugin-firebase";
 import { navigate } from "gatsby";
 import { toast } from "react-semantic-toasts";
 import { useDispatch, useSelector } from "react-redux";
-
-import "firebase/auth";
 
 import { AuthActions } from "../state/actions/auth";
 import { User } from "../models/User";
@@ -29,7 +26,8 @@ export const useAuth = () => {
 
   const getUserDoc = async (uid: string) => {
     const doc = await firebase.firestore().collection("users").doc(uid).get();
-    return new User(doc.data());
+    const params = doc.data() as { [field: string]: unknown };
+    return new User(params);
   };
 
   const reloadUserDoc = async (uid: string) => {
@@ -44,7 +42,7 @@ export const useAuth = () => {
   const setCurrentUser = async () => {
     if (typeof window !== "undefined") {
       dispatch(AuthActions.setLoading(true));
-      firebase.auth().onAuthStateChanged(async (currentUser: f.User | null) => {
+      firebase.auth().onAuthStateChanged(async (currentUser) => {
         dispatch(AuthActions.setUser(currentUser));
         if (currentUser) {
           await reloadUserDoc(currentUser.uid);
