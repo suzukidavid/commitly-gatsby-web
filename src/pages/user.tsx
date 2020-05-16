@@ -8,7 +8,7 @@ const UserPage: React.FC = () => {
   return (
     <Layout>
       <Router basepath="/user">
-        <UserProfile path="/profile" />
+        <UserProfile path="/profile/:username" />
       </Router>
     </Layout>
   );
