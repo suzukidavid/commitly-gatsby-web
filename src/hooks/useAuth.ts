@@ -8,6 +8,7 @@ import "firebase/auth";
 
 import { AuthActions } from "../state/actions/auth";
 import { GithubDataType, SettiingDataType, TwitterDataType, UserDocType } from "../types/userDoc";
+import { User } from "../models/User";
 
 export const TwitterProviderId = "twitter.com";
 
@@ -29,7 +30,10 @@ export const useAuth = () => {
 
   const setUserDoc = async (currentUser: f.User) => {
     const doc = await firebase.firestore().collection("users").doc(currentUser.uid).get();
-    dispatch(AuthActions.setUserDoc(doc.data()));
+    if (doc.exists) {
+      const tmpUserDoc = new User(doc.data());
+      dispatch(AuthActions.setUserDoc(tmpUserDoc));
+    }
   };
 
   const setCurrentUser = async () => {
@@ -67,6 +71,7 @@ export const useAuth = () => {
     }
     await firebase.firestore().collection("users").doc(uid).set(userData, { merge: true });
     await navigate("/setting");
+
     setTimeout(() => {
       toast({
         type: "success",
@@ -79,6 +84,7 @@ export const useAuth = () => {
     await firebase.auth().signOut();
     dispatch(AuthActions.setUserDoc(null));
     await navigate("/");
+
     setTimeout(() => {
       toast({
         type: "success",
@@ -156,12 +162,9 @@ export const useAuth = () => {
       return null;
     }
 
-    const userData = {
-      setting: { ...userDoc.setting, tweetTime },
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    } as UserDocType;
+    const nextDoc = userDoc.changeSettingTweetTime(tweetTime);
 
-    await firebase.firestore().collection("users").doc(user.uid).set(userData, { merge: true });
+    await firebase.firestore().collection("users").doc(user.uid).set(nextDoc.getFirestoreObject(), { merge: true });
     await setUserDoc(user);
 
     toast({
