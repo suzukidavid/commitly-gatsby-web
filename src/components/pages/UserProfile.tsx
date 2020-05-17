@@ -1,14 +1,23 @@
 import React from "react";
 import { RouteComponentProps } from "@reach/router";
+import { navigate } from "gatsby";
 
 import { SEO } from "../templates/SEO";
 
 export const UserProfile: React.FC<RouteComponentProps<{ username: string }>> = ({ username }) => {
-  console.log(username);
+  React.useEffect(() => {
+    if (!username) {
+      navigate("/");
+    }
+  }, [username]);
+
+  if (!username) {
+    return null;
+  }
   return (
     <>
       <SEO title="Profile" />
-      <div>UserProfile</div>
+      <div>UserProfile: {username}</div>
     </>
   );
 };

@@ -8,7 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 
 export const Header: React.FC = () => {
   const { login, logout } = useAuth();
-  const { user } = useSelector((state) => state.auth);
+  const { user, userDoc } = useSelector((state) => state.auth);
   return (
     <Wrapper>
       <LogoLink to="/">
@@ -17,9 +17,10 @@ export const Header: React.FC = () => {
 
       <Dropdown icon={<BarIcon name="bars" size="big" />}>
         <Dropdown.Menu direction="left">
-          {user ? (
+          {user && userDoc ? (
             <>
               <Dropdown.Item text="トップ" icon="home" as={Link} to="/" />
+              <Dropdown.Item text="プロフィール" icon="user" as={Link} to={`user/profile/${userDoc.github.username}`} />
               <Dropdown.Item text="設定" icon="setting" as={Link} to="/setting" />
               <Dropdown.Item text="ログアウト" icon="sign-out" onClick={() => logout()} />
             </>
