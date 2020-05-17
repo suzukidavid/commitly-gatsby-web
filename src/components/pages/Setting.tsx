@@ -26,6 +26,7 @@ export const Setting: React.FC<RouteComponentProps> = () => {
   return (
     <>
       <SEO title="Setting" />
+
       <Segment vertical>
         <Header as="h1">設定</Header>
       </Segment>

@@ -45,7 +45,7 @@ class ProfileCommitData {
 
   constructor({ ...params }) {
     const { date, totalCommits, extentions } = params;
-    this.date = dayjs(date);
+    this.date = dayjs.unix(date);
     this.totalCommits = totalCommits;
     this.extentions = Object.entries(extentions).map(([name, lineNum]) => new ExtentionData({ name, lineNum }));
   }
