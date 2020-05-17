@@ -20,7 +20,12 @@ export const Header: React.FC = () => {
           {user && userDoc ? (
             <>
               <Dropdown.Item text="トップ" icon="home" as={Link} to="/" />
-              <Dropdown.Item text="プロフィール" icon="user" as={Link} to={`user/profile/${userDoc.github.username}`} />
+              <Dropdown.Item
+                text="プロフィール"
+                icon="user"
+                as={Link}
+                to={`/user/profile/${userDoc.github.username}`}
+              />
               <Dropdown.Item text="設定" icon="setting" as={Link} to="/setting" />
               <Dropdown.Item text="ログアウト" icon="sign-out" onClick={() => logout()} />
             </>
