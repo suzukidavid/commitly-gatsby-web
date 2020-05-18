@@ -16,15 +16,19 @@ export const UserProfile: React.FC<RouteComponentProps<{ username: string }>> = 
 
   const { profileData } = useProfileData(username);
 
-  if (!username || !profileData) {
+  if (!username) {
     return null;
+  }
+
+  if (!profileData) {
+    return <SEO title={username} />;
   }
 
   const { commits } = profileData;
 
   return (
     <>
-      <SEO title={`Profile of ${username}`} />
+      <SEO title={username} />
 
       <Segment vertical>
         <Header as="h1">
