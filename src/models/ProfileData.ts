@@ -49,6 +49,10 @@ class ProfileCommitData {
     this.totalCommits = totalCommits;
     this.extentions = Object.entries(extentions).map(([name, lineNum]) => new ExtentionData({ name, lineNum }));
   }
+
+  sortedExtensions() {
+    return this.extentions.sort((a, b) => (a.lineNum > b.lineNum ? -1 : 1));
+  }
 }
 
 export class ProfileData {

@@ -1,7 +1,8 @@
 import React from "react";
 import { RouteComponentProps } from "@reach/router";
 import { navigate } from "gatsby";
-import { Feed, Header, Icon, Segment } from "semantic-ui-react";
+import { Header, Icon, Label, Segment } from "semantic-ui-react";
+import styled from "styled-components";
 
 import { SEO } from "../templates/SEO";
 import { useProfileData } from "../../hooks/useProfileData";
@@ -35,20 +36,46 @@ export const UserProfile: React.FC<RouteComponentProps<{ username: string }>> = 
       <Segment vertical>
         {commits.map((commit, index) => {
           const { date, totalCommits } = commit;
-          console.log(date);
           return (
-            <Feed.Event key={index}>
-              <Feed.Label>
-                <Icon name="github" />
-              </Feed.Label>
-              <Feed.Content>
-                <Feed.Date>{date.format("YYYY/MM/DD")}</Feed.Date>
-                <Feed.Summary>{totalCommits} 行のコードを書きました！</Feed.Summary>
-              </Feed.Content>
-            </Feed.Event>
+            <CommitWrapper key={index}>
+              <Label attached="top">{date.format("YYYY年M月D日(ddd)")}</Label>
+              <TotalCommit>
+                合計<ToralCommitNum>{totalCommits}</ToralCommitNum>行のコードを書きました！
+              </TotalCommit>
+              {commit.sortedExtensions().map((extention, extentionIndex) => {
+                const { name, lineNum } = extention;
+                return (
+                  <CommitText key={extentionIndex}>
+                    {name}: {lineNum}
+                  </CommitText>
+                );
+              })}
+            </CommitWrapper>
           );
         })}
       </Segment>
     </>
   );
 };
+
+const CommitWrapper = styled.div`
+  position: relative;
+  padding: 10px;
+  border: 1px solid #22242626;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #fff;
+`;
+
+const TotalCommit = styled.div`
+  display: flex;
+  align-items: baseline;
+`;
+
+const ToralCommitNum = styled.div`
+  font-weight: bold;
+  font-size: 24px;
+  margin: 0 5px;
+`;
+
+const CommitText = styled.div``;
