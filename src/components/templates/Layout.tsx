@@ -2,10 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import { Container } from "semantic-ui-react";
 import { SemanticToastContainer } from "react-semantic-toasts";
+import dayjs from "dayjs";
+import "dayjs/locale/ja";
 
 import { Header } from "../molecules/Header";
 import { Footer } from "../molecules/Footer";
 import { useAuth } from "../../hooks/useAuth";
+
+dayjs.locale("ja");
 
 export const Layout: React.FC = ({ children }) => {
   const { setCurrentUser } = useAuth();
