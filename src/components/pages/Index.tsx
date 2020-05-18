@@ -12,7 +12,7 @@ export const Index: React.FC<RouteComponentProps> = () => {
       <SEO title="Top" />
 
       <Segment vertical>
-        <Image src="logo.png" />
+        <Image src="/logo.png" />
       </Segment>
 
       <Segment vertical>

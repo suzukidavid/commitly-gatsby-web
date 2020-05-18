@@ -12,7 +12,7 @@ export const Header: React.FC = () => {
   return (
     <Wrapper>
       <LogoLink to="/">
-        <LogoImage src="logo_header.png" />
+        <LogoImage src="/logo_header.png" />
       </LogoLink>
 
       <Dropdown icon={<BarIcon name="bars" size="big" />}>
