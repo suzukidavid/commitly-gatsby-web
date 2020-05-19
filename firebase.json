@@ -48,6 +48,12 @@
           }
         ]
       }
+    ],
+    "rewrites": [
+      {
+        "source": "/user/profile{,/**}",
+        "destination": "/user/index.html"
+      }
     ]
   }
 }
