@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 import { SEO } from "../templates/SEO";
 import { useProfileData } from "../../hooks/useProfileData";
+import { Layout } from "../templates/Layout";
 
 export const UserProfile: React.FC<RouteComponentProps<{ username: string }>> = ({ username }) => {
   React.useEffect(() => {
@@ -16,18 +17,18 @@ export const UserProfile: React.FC<RouteComponentProps<{ username: string }>> = 
 
   const { profileData } = useProfileData(username);
 
-  if (!username) {
-    return null;
-  }
-
-  if (!profileData) {
-    return <SEO title={username} />;
+  if (!username || !profileData) {
+    return (
+      <Layout>
+        <SEO title={username || ""} />
+      </Layout>
+    );
   }
 
   const { commits } = profileData;
 
   return (
-    <>
+    <Layout>
       <SEO title={username} />
 
       <Segment vertical>
@@ -58,7 +59,7 @@ export const UserProfile: React.FC<RouteComponentProps<{ username: string }>> = 
           );
         })}
       </Segment>
-    </>
+    </Layout>
   );
 };
 
@@ -83,3 +84,5 @@ const ToralCommitNum = styled.div`
 `;
 
 const CommitText = styled.div``;
+
+export default UserProfile;

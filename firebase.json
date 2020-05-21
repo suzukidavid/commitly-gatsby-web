@@ -51,8 +51,8 @@
     ],
     "rewrites": [
       {
-        "source": "/user/profile{,/**}",
-        "destination": "/user/index.html"
+        "source": "/profile/**",
+        "destination": "/profile/*/index.html"
       }
     ]
   }

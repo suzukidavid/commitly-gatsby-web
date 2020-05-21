@@ -18,10 +18,11 @@ exports.onCreateWebpackConfig = ({ stage, actions }) => {
   });
 };
 
-exports.onCreatePage = async ({ page, actions }) => {
+exports.createPages = async ({ actions }) => {
   const { createPage } = actions;
-  if (page.path.match(/^\/user/)) {
-    page.matchPath = "/user/*";
-    createPage(page);
-  }
+  createPage({
+    path: "/profile/*",
+    matchPath: "/profile/:username",
+    component: path.resolve(`src/components/pages/UserProfile.tsx`),
+  });
 };
