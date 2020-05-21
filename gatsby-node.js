@@ -21,7 +21,7 @@ exports.onCreateWebpackConfig = ({ stage, actions }) => {
 exports.createPages = async ({ actions }) => {
   const { createPage } = actions;
   createPage({
-    path: "/profile/*",
+    path: "/profile/",
     matchPath: "/profile/:username",
     component: path.resolve(`src/components/pages/UserProfile.tsx`),
   });
