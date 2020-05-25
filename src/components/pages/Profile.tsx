@@ -8,7 +8,7 @@ import { SEO } from "../templates/SEO";
 import { useProfileData } from "../../hooks/useProfileData";
 import { Layout } from "../templates/Layout";
 
-export const UserProfile: React.FC<RouteComponentProps<{ username: string }>> = ({ username }) => {
+export const Profile: React.FC<RouteComponentProps<{ username: string }>> = ({ username }) => {
   React.useEffect(() => {
     if (!username) {
       navigate("/");
@@ -85,4 +85,4 @@ const ToralCommitNum = styled.div`
 
 const CommitText = styled.div``;
 
-export default UserProfile;
+export default Profile;

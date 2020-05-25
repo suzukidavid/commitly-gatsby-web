@@ -23,6 +23,6 @@ exports.createPages = async ({ actions }) => {
   createPage({
     path: "/profile/",
     matchPath: "/profile/:username",
-    component: path.resolve(`src/components/pages/UserProfile.tsx`),
+    component: path.resolve(`src/components/pages/Profile.tsx`),
   });
 };
