@@ -34,7 +34,7 @@
     "gatsby-source-filesystem": "2.3.10",
     "gatsby-transformer-sharp": "2.5.4",
     "immer": "6.0.9",
-    "less": "3.11.2",
+    "less": "3.11.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-firebase-hooks": "2.2.0",
