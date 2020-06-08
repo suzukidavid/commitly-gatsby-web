@@ -38,7 +38,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-firebase-hooks": "2.2.0",
-    "react-helmet": "6.0.0",
+    "react-helmet": "6.1.0",
     "react-redux": "7.2.0",
     "react-semantic-toasts": "0.6.5",
     "redux": "4.0.5",
