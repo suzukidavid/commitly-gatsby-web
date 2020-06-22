@@ -33,7 +33,7 @@
     "gatsby-plugin-twitter": "2.3.4",
     "gatsby-source-filesystem": "2.3.12",
     "gatsby-transformer-sharp": "2.5.5",
-    "immer": "7.0.3",
+    "immer": "7.0.4",
     "less": "3.11.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
