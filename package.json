@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "babel-plugin-styled-components": "1.10.7",
-    "dayjs": "1.8.28",
+    "dayjs": "1.8.29",
     "dotenv": "8.2.0",
     "firebase": "7.15.5",
     "gatsby": "2.23.15",
