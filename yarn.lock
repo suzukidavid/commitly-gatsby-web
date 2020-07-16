@@ -9362,10 +9362,10 @@ less-loader@^6.1.3:
     loader-utils "^2.0.0"
     schema-utils "^2.7.0"
 
-less@3.12.0:
-  version "3.12.0"
-  resolved "https://registry.yarnpkg.com/less/-/less-3.12.0.tgz#f23f9bd94ba72495994865d84e3b5ac6ee8a0363"
-  integrity sha512-3mmSHFRP9hGxxQgAKgChfau1LO3ksV/zyZf1qd2ENyBV778NA9Ids99wFRA20jE+5prT7oScKod8PoGlxSe1gg==
+less@3.12.1:
+  version "3.12.1"
+  resolved "https://registry.yarnpkg.com/less/-/less-3.12.1.tgz#833a628d60a5dbed3865c1b42d9d8aaeeb8d8c2a"
+  integrity sha512-lI1s2TO4BbMwS/S45/V7K0UuKlu87ie6stg58b0PTPD7x9MDXWwyOp+xQORin2lyYwn/HX7r2o9mjPJ4rYvUIA==
   dependencies:
     tslib "^1.10.0"
   optionalDependencies:
