@@ -27,7 +27,7 @@
     "gatsby-plugin-offline": "3.2.18",
     "gatsby-plugin-react-helmet": "3.3.10",
     "gatsby-plugin-react-redux": "1.1.0-0",
-    "gatsby-plugin-sharp": "2.6.19",
+    "gatsby-plugin-sharp": "2.6.20",
     "gatsby-plugin-styled-components": "3.3.10",
     "gatsby-plugin-twitter": "2.3.10",
     "gatsby-source-filesystem": "2.3.20",
